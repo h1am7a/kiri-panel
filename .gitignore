@@ -1,0 +1,18 @@
+# Runtime Data
+data/
+data/*
+!data/.gitkeep
+
+# Node & Build artifacts
+node_modules/
+web/node_modules/
+dist/
+web/dist/
+
+# Logs & Temp
+*.log
+tmp/
+
+# OS metadata
+.DS_Store
+Thumbs.db

@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # ========================================================
+  # Kiri Panel: Управление пользователями, подписками и вебхуками
+  # ========================================================
+  panel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kiri-panel
+    restart: always
+    network_mode: host
+    environment:
+      - PORT=8080
+      - DATA_DIR=/app/data
+      - AWG_CONFIG_PATH=/etc/amnezia/amneziawg/awg0.conf
+    volumes:
+      - ./data:/app/data
+      - ./data/awg:/etc/amnezia/amneziawg
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ========================================================
+  # Hysteria 2 Server: Высокоскоростной QUIC с Gecko обфускацией
+  # ========================================================
+  hysteria:
+    image: tobyxdd/hysteria:latest
+    container_name: kiri-hysteria
+    restart: always
+    network_mode: host
+    command: ["server", "-c", "/etc/hysteria/config.yaml"]
+    volumes:
+      - ./data/hy2/config.yaml:/etc/hysteria/config.yaml:ro
+      - ./data/certs:/etc/hysteria/certs:ro
+    depends_on:
+      - panel
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

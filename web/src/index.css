@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-cosmic: #0B0F19;
+    --color-cyan: #00F0FF;
+    --color-pink: #FF2A85;
+    --color-purple: #C084FC;
+  }
+
+  body {
+    background-color: #0B0F19;
+    background-image: 
+      radial-gradient(circle at 15% 20%, rgba(255, 42, 133, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.09) 0%, transparent 45%),
+      radial-gradient(circle at 50% 80%, rgba(192, 132, 252, 0.06) 0%, transparent 50%),
+      linear-gradient(rgba(11, 15, 25, 0.94), rgba(11, 15, 25, 0.94)),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0, 240, 255, 0.03) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0, 240, 255, 0.03) 40px);
+    background-attachment: fixed;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #060911;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e2c4a;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00F0FF;
+  }
+}
+
+/* Cyber-Moe HUD Chamfered Card Styles */
+.hud-card {
+  position: relative;
+  background: rgba(15, 22, 38, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  clip-path: polygon(
+    0 12px,
+    12px 0,
+    calc(100% - 12px) 0,
+    100% 12px,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    12px 100%,
+    0 calc(100% - 12px)
+  );
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hud-card:hover {
+  border-color: rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+}
+
+.hud-card-pink {
+  position: relative;
+  background: rgba(15, 22, 38, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 42, 133, 0.25);
+  clip-path: polygon(
+    0 12px,
+    12px 0,
+    calc(100% - 12px) 0,
+    100% 12px,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    12px 100%,
+    0 calc(100% - 12px)
+  );
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hud-card-pink:hover {
+  border-color: rgba(255, 42, 133, 0.55);
+  box-shadow: 0 0 20px rgba(255, 42, 133, 0.2);
+}
+
+/* Cut corners with 4 HUD corner brackets */
+.hud-corner-tl {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #00F0FF;
+  border-left: 2px solid #00F0FF;
+  pointer-events: none;
+}
+
+.hud-corner-tr {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #00F0FF;
+  border-right: 2px solid #00F0FF;
+  pointer-events: none;
+}
+
+.hud-corner-bl {
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 2px solid #00F0FF;
+  border-left: 2px solid #00F0FF;
+  pointer-events: none;
+}
+
+.hud-corner-br {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 2px solid #00F0FF;
+  border-right: 2px solid #00F0FF;
+  pointer-events: none;
+}
+
+/* Neon Glow Texts */
+.text-glow-cyan {
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+.text-glow-pink {
+  text-shadow: 0 0 10px rgba(255, 42, 133, 0.7), 0 0 20px rgba(255, 42, 133, 0.4);
+}
+
+.text-glow-purple {
+  text-shadow: 0 0 10px rgba(192, 132, 252, 0.7), 0 0 20px rgba(192, 132, 252, 0.4);
+}
+
+/* Scanline Overlay */
+.scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+}
+
+/* Speech Bubble triangle */
+.bubble-tail-right {
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 10px solid rgba(15, 22, 38, 0.95);
+}

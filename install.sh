@@ -115,6 +115,7 @@ fi
 # 6. Подготовка каталогов и сертификатов
 echo -e "${YELLOW}[4/6] 📁 Подготовка структуры данных и SSL-сертификатов...${NC}"
 mkdir -p data/certs data/awg data/hy2
+[ -d "data/hy2/config.yaml" ] && rm -rf "data/hy2/config.yaml"
 
 # Проверяем сертификаты для Hysteria 2
 if [ ! -f "data/certs/server.crt" ] || [ ! -f "data/certs/server.key" ]; then

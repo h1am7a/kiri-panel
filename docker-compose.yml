@@ -37,7 +37,7 @@ services:
     network_mode: host
     command: ["server", "-c", "/etc/hysteria/config.yaml"]
     volumes:
-      - ./data/hy2/config.yaml:/etc/hysteria/config.yaml:ro
+      - ./data/hy2:/etc/hysteria:ro
       - ./data/certs:/etc/hysteria/certs:ro
     depends_on:
       - panel

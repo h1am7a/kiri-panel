@@ -19,13 +19,10 @@ WORKDIR /app
 RUN apk add --no-cache git make gcc musl-dev
 
 # 1. Build Kiri Panel Backend
-COPY go.mod go.sum* ./
-RUN go mod download || true
-
 COPY . .
 COPY --from=frontend-builder /app/web/dist ./web/dist
 
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /kiri-server ./cmd/server
+RUN go mod tidy && CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /kiri-server ./cmd/server
 
 # 2. Build official amneziawg-go userspace daemon
 RUN (CGO_ENABLED=0 go install github.com/amnezia-vpn/amneziawg-go@latest || true) && \

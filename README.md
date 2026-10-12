@@ -28,17 +28,26 @@
 
 ## 🚀 Быстрый старт на Ubuntu VPS
 
-### 1. Скопируйте репозиторий на сервер
+### 1. Быстрая установка на Ubuntu VPS (Однострочник)
+
+Поскольку репозиторий приватный, выберите один из удобных способов:
+
+#### ⚡ Вариант A (Через GitHub Personal Access Token — самый простой)
+Создайте токен на GitHub (`Settings` -> `Developer Settings` -> `Personal Access Tokens (classic)` с галкой `repo`) и выполните на сервере:
 ```bash
-# Клонируйте репозиторий или загрузите архив с проектом:
-git clone https://github.com/your-username/kiri-panel.git /opt/kiri-panel
-cd /opt/kiri-panel
+git clone https://<ВАШ_GITHUB_TOKEN>@github.com/h1am7a/kiri-panel.git /opt/kiri-panel && cd /opt/kiri-panel && sudo bash install.sh
 ```
 
-### 2. Запустите автоматический установщик
+#### 🔑 Вариант B (Через SSH-ключ)
+Если открытый SSH-ключ вашего сервера добавлен в ваш аккаунт GitHub:
 ```bash
-chmod +x install.sh
-sudo ./install.sh
+git clone git@github.com:h1am7a/kiri-panel.git /opt/kiri-panel && cd /opt/kiri-panel && sudo bash install.sh
+```
+
+#### 📦 Вариант C (Копирование файлов напрямую без Git)
+Если вы скопировали папку `kiri-panel` на сервер (например, через WinSCP / FileZilla / SCP):
+```bash
+cd /opt/kiri-panel && sudo bash install.sh
 ```
 
 Скрипт **автоматически в один клик**:

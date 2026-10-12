@@ -58,8 +58,25 @@ export const UserList: React.FC = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const handleDownloadConf = (user: User) => {
+  const handleDownloadConf = async (user: User) => {
     soundFx.ding();
+    try {
+      const res = await fetch(`/api/users/${user.id}/raw-conf`);
+      if (res.ok) {
+        const conf = await res.text();
+        const element = document.createElement('a');
+        const file = new Blob([conf], { type: 'text/plain' });
+        element.href = URL.createObjectURL(file);
+        element.download = `${user.name.toLowerCase().replace(/\s+/g, '_')}_kiri_awg.conf`;
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+        setMood('happy', `Файл ${element.download} загружен! Готово к импорту~ 🛡️`, 4000);
+        return;
+      }
+    } catch {
+      // fallback to store template
+    }
     const conf = getWireguardConfigText(user);
     const element = document.createElement('a');
     const file = new Blob([conf], { type: 'text/plain' });

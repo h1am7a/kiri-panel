@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"strconv"
 	"strings"
@@ -493,6 +494,13 @@ func (a *API) GetUserRawConf(c *gin.Context) {
 	if serverEndpoint == "" {
 		serverEndpoint = serverCfg.ServerIP
 	}
+	if serverEndpoint == "" || serverEndpoint == "127.0.0.1" || serverEndpoint == "localhost" {
+		if host, _, err := net.SplitHostPort(c.Request.Host); err == nil {
+			serverEndpoint = host
+		} else if c.Request.Host != "" {
+			serverEndpoint = c.Request.Host
+		}
+	}
 	serverEndpoint = fmt.Sprintf("%s:%d", serverEndpoint, serverCfg.AWG_Port)
 
 	clientConf := awg.ClientConfig{
@@ -596,6 +604,13 @@ func (a *API) GetSubscription(c *gin.Context) {
 	serverHost := serverCfg.ServerDomain
 	if serverHost == "" {
 		serverHost = serverCfg.ServerIP
+	}
+	if serverHost == "" || serverHost == "127.0.0.1" || serverHost == "localhost" {
+		if host, _, err := net.SplitHostPort(c.Request.Host); err == nil {
+			serverHost = host
+		} else if c.Request.Host != "" {
+			serverHost = c.Request.Host
+		}
 	}
 
 	subscriptionOpts := mihomo.SubscriptionOptions{

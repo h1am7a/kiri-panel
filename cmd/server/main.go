@@ -127,6 +127,27 @@ func initServicesConfig(d *db.DB, awgService *awg.Service, hy2Service *hy2.Servi
 		return
 	}
 
+	// Auto-detect public IP if server_ip is default 127.0.0.1 or empty
+	if serverCfg.ServerIP == "127.0.0.1" || serverCfg.ServerIP == "" {
+		go func() {
+			client := &http.Client{Timeout: 3 * time.Second}
+			for _, endpoint := range []string{"https://api.ipify.org", "https://icanhazip.com", "https://ifconfig.me"} {
+				resp, err := client.Get(endpoint)
+				if err == nil && resp.StatusCode == http.StatusOK {
+					defer resp.Body.Close()
+					ipBytes, _ := io.ReadAll(resp.Body)
+					detectedIP := strings.TrimSpace(string(ipBytes))
+					if detectedIP != "" && !strings.Contains(detectedIP, "<") {
+						serverCfg.ServerIP = detectedIP
+						_ = d.UpdateServerConfig(context.Background(), serverCfg)
+						log.Printf("[INIT] Auto-detected public server IP: %s", detectedIP)
+						break
+					}
+				}
+			}
+		}()
+	}
+
 	// 1. Sync Hysteria 2 configuration file
 	hy2Conf := hy2.ServerConfig{
 		Listen:        fmt.Sprintf(":%d", serverCfg.Hy2_Port),

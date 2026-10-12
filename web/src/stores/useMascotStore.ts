@@ -7,7 +7,7 @@ interface MascotState {
   message: string;
   clickCount: number;
   lastClickTime: number;
-  timerId: NodeJS.Timeout | null;
+  timerId: ReturnType<typeof setTimeout> | null;
   setMood: (mood: MascotMood, message?: string, durationMs?: number) => void;
   interact: () => void;
   resetToIdle: () => void;
@@ -45,7 +45,7 @@ export const useMascotStore = create<MascotState>((set, get) => ({
 
     const defaultMsg = message || IDLE_QUOTES[Math.floor(Math.random() * IDLE_QUOTES.length)];
 
-    let nextTimer: NodeJS.Timeout | null = null;
+    let nextTimer: ReturnType<typeof setTimeout> | null = null;
     if (mood !== 'idle') {
       nextTimer = setTimeout(() => {
         get().resetToIdle();

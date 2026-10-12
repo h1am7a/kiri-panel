@@ -1,102 +1,101 @@
-# 🌸 Kiri Panel // 霧 (Cyber-Moe VPN Management Matrix)
+# Kiri Panel
+
+Lightweight management dashboard for **AmneziaWG** and **Hysteria 2**, designed for personal and family use. Generates unified **Mihomo (Clash.Meta)** subscription configs with automatic failover and split routing.
 
 <p align="center">
-  <img src="web/public/mascot/proud.jpg" width="280" alt="Kiri Mascot" />
-  <br>
-  <b>Твой личный проводник сквозь цифровой туман блокировок РКН и ТСПУ</b>
-  <br>
-  <i>AmneziaWG (AWG 2.0 / 3.1) + Hysteria 2 (Gecko) + Универсальный генератор подписок Mihomo</i>
+  <img src="web/public/mascot/proud.jpg" width="220" alt="Kiri Panel" />
 </p>
 
----
+## Overview
 
-## 🌟 Почему создана Kiri Panel?
+Kiri Panel pairs two anti-censorship protocols into a single service:
+- **AmneziaWG (AWG 2.0 / 3.1):** Primary low-latency WireGuard tunnel with junk packet and header obfuscation (`Jc`, `Jmin`, `Jmax`, `S1`, `S2`, `H1-H4`).
+- **Hysteria 2:** Backup QUIC-based tunnel with Gecko obfuscation for restrictive networks.
+- **Mihomo Generator:** Serves dynamic YAML profiles with auto-failover (AmneziaWG primary, Hysteria 2 backup) and split tunneling rules (bypassing local services, routing foreign traffic).
+- **Userspace Operation:** Runs via `amneziawg-go` in Docker over `/dev/net/tun`. No host DKMS module build required; resilient against host kernel updates.
+- **Zero-Downtime User Management:** Dynamic peer syncing via `awg syncconf` and Hysteria 2 HTTP auth webhook.
 
-Существующие панели либо перегружены лишними протоколами и биллингом (Marzban, 3x-ui), либо умеют только один протокол (wg-easy). 
-В РФ в 2026 году связка **AmneziaWG (как основной туннель)** и **Hysteria 2 с Gecko (как непробиваемый резерв)** — самый стабильный дуэт для семьи и близких.
+## Architecture
 
-**Kiri Panel объединяет их в единую систему с одной кнопкой подключения для пользователей:**
-1. **Никакой головной боли с ядрами Linux:** Работает в Docker через userspace `/dev/net/tun`. Не ломается при `apt update && apt upgrade` и обновлениях ядра Ubuntu!
-2. **Нулевой даунтайм (Zero Reload):** Добавление и блокировка пользователей происходят мгновенно через HTTP Webhook Hysteria 2 и `awg syncconf`.
-3. **Единый конфиг для семьи (Mihomo):** Родным не нужно ставить 3 разных приложения. Они ставят одно приложение (FlClash, Mihomo Party, Karing) и получают авто-переключение (Failover) под капотом:
-   * **AmneziaWG** — основной скоростной протокол.
-   * **Hysteria 2 (Gecko)** — авто-бэкап при блокировках.
-   * **Сплит-туннель:** Госуслуги, Сбер, Т-Банк и сайты `.ru` идут напрямую мимо VPN на скорости домашнего тарифа!
-4. **Уникальный Cyber-Moe дизайн:** Встроенный интерактивный маскот **Кири**, матовое стекло (Glassmorphism), HUD-карточки со статусами и синтезированные аниме-звуки интерфейса.
+```
+Clients (Mihomo Party / FlClash / Karing / AmneziaWG)
+                     │
+       ┌─────────────┴─────────────┐
+       ▼                           ▼
+AmneziaWG (UDP 51820)      Hysteria 2 (UDP 443 + Hopping)
+       │                           │
+       └─────────────┬─────────────┘
+                     ▼
+             Docker Container
+     ┌───────────────────────────────┐
+     │ Kiri Panel (Go + React SPA)   │
+     │ - REST API (:8080)            │
+     │ - Subscriptions (/sub/:token) │
+     │ - Hysteria Auth Webhook       │
+     │ - Embedded SQLite Database    │
+     └───────────────────────────────┘
+```
 
----
+## Quick Start (Ubuntu VPS)
 
-## 🚀 Быстрый старт на Ubuntu VPS
+### One-line Installation
 
-### 1. Быстрая установка на Ubuntu VPS (Однострочник)
-
-Поскольку репозиторий приватный, выберите один из удобных способов:
-
-#### ⚡ Вариант A (Через GitHub Personal Access Token — самый простой)
-Создайте токен на GitHub (`Settings` -> `Developer Settings` -> `Personal Access Tokens (classic)` с галкой `repo`) и выполните на сервере:
 ```bash
-git clone https://<ВАШ_GITHUB_TOKEN>@github.com/h1am7a/kiri-panel.git /opt/kiri-panel && cd /opt/kiri-panel && sudo bash install.sh
+git clone https://github.com/h1am7a/kiri-panel.git /opt/kiri-panel && cd /opt/kiri-panel && sudo bash install.sh
 ```
 
-#### 🔑 Вариант B (Через SSH-ключ)
-Если открытый SSH-ключ вашего сервера добавлен в ваш аккаунт GitHub:
-```bash
-git clone git@github.com:h1am7a/kiri-panel.git /opt/kiri-panel && cd /opt/kiri-panel && sudo bash install.sh
+*(If the repository is private, authenticate via SSH key or pass a GitHub personal access token in the clone URL).*
+
+The installer script (`install.sh`) automatically:
+1. Enables **BBR congestion control** (`net.ipv4.tcp_congestion_control = bbr`).
+2. Configures **64 MB UDP buffers** (`rmem_max` / `wmem_max = 67108864`) to eliminate UDP packet drops under high throughput.
+3. Sets system socket descriptors (`nofile = 1048576`).
+4. Installs Docker and Docker Compose (if not already installed).
+5. Generates self-signed TLS certificates for initial setup.
+6. Builds and starts the `kiri-panel` and `kiri-hysteria` containers.
+
+### Accessing the Web UI
+
+Once installed, open your browser:
+```
+http://<SERVER_IP>:8080
 ```
 
-#### 📦 Вариант C (Копирование файлов напрямую без Git)
-Если вы скопировали папку `kiri-panel` на сервер (например, через WinSCP / FileZilla / SCP):
-```bash
-cd /opt/kiri-panel && sudo bash install.sh
-```
+From the dashboard you can:
+- Add or disable peers.
+- Copy client subscription URLs (`/sub/:token/mihomo.yaml`).
+- Download raw `.conf` profiles for official AmneziaWG clients.
+- View real-time tunnel telemetry and server status.
 
-Скрипт **автоматически в один клик**:
-* **Включит BBR Congestion Control** (алгоритм от Google для ускорения TCP/VPN соединений и снижения буферблоата).
-* **Настроит сетевые UDP-буферы до 64 МБ** (`rmem_max` и `wmem_max` в ядре Linux), чтобы исключить потери UDP-пакетов в 4K YouTube на Hysteria 2 и AmneziaWG.
-* **Увеличит системные лимиты сокетов** (`nofile` до 1,000,000) для стабильной работы 30+ одновременных устройств.
-* Установит Docker и Docker Compose (если отсутствуют).
-* Включит IPv4 / IPv6 Forwarding в ядре.
-* Сгенерирует стартовые SSL-сертификаты.
-* Соберет и запустит сервисы `kiri-panel` и `kiri-hysteria`.
+## Client Support
 
-### 3. Откройте панель в браузере
-Перейдите по адресу:
-```text
-http://<IP_ВАШЕГО_СЕРВЕРА>:8080
-```
-
----
-
-## ⚙️ Структура проекта
-
-* `cmd/server/main.go` — Точка входа Go-бэкенда, маршрутизатор и раздача встроенного React SPA.
-* `internal/db/db.go` — База данных SQLite (`data/kiri.db`) без зависимости от CGO.
-* `internal/service/awg/` — Генератор ключей Curve25519, конфигов AmneziaWG 2.0 / 3.1.
-* `internal/service/hy2/` — HTTP Webhook аутентификатор для Hysteria 2 и конфиг сервера.
-* `internal/service/mihomo/` — Генератор эталонного профиля подписки Mihomo с Failover и сплит-рулами.
-* `web/` — Десктопный React + Tailwind UI с интерактивной тянкой Кири.
-* `docker-compose.yml` — Оркестрация контейнеров панели и демона Hysteria 2.
-
----
-
-## 📱 Клиентские приложения для семьи
-
-| Платформа | Рекомендуемое приложение | Почему именно оно? |
+| Platform | Recommended Client | Engine / Features |
 | :--- | :--- | :--- |
-| **Android** | [FlClash](https://github.com/chen08209/FlClash) | Нативное ядро Mihomo, русский язык, **плитка в шторке Android** |
-| **Windows** | [Mihomo Party](https://github.com/mihomo-party-org/clash-party) или [Clash Verge Rev](https://github.com/clash-verge-rev/clash-verge-rev) | Удобный TUN-режим в 1 клик, авто-обновление ядер |
-| **iOS** | [Karing](https://apps.apple.com/app/karing/id6472431578) (Бесплатно в RU App Store) | Читает подписку, нативно поддерживает Hysteria 2 Gecko |
+| **Android** | [FlClash](https://github.com/chen08209/FlClash) | Mihomo core, Quick Settings tile |
+| **Windows** | [Mihomo Party](https://github.com/mihomo-party-org/clash-party) / [Clash Verge Rev](https://github.com/clash-verge-rev/clash-verge-rev) | One-click TUN mode, Mihomo >= 1.19.30 |
+| **iOS** | [Karing](https://apps.apple.com/app/karing/id6472431578) | Supports Mihomo subscriptions, native Hy2 Gecko |
 
----
+## Network Ports
 
-## 🛡️ Безопасность и сертификаты (Let's Encrypt для Hysteria 2)
+| Service | Port | Protocol | Purpose |
+| :--- | :--- | :--- | :--- |
+| Kiri Web UI | `8080` | TCP | Admin dashboard & subscription endpoint |
+| AmneziaWG | `51820` | UDP | Obfuscated WireGuard tunnel |
+| Hysteria 2 | `443` | UDP | QUIC proxy |
+| Hysteria Hopping | `20000-50000` | UDP | Port hopping range |
 
-Для полноценной работы Hysteria 2 положите ваши валидные сертификаты Let's Encrypt в папку `data/certs/`:
-* `data/certs/server.crt` (fullchain.pem)
-* `data/certs/server.key` (privkey.pem)
+## Custom TLS Certificates (Hysteria 2)
 
----
+By default, the installer generates self-signed certificates in `data/certs/`. For trusted TLS with your own domain:
+1. Place your certificates in `data/certs/`:
+   - `data/certs/server.crt` (fullchain)
+   - `data/certs/server.key` (private key)
+2. In the panel settings, specify your domain name.
+3. Restart containers:
+   ```bash
+   docker compose restart
+   ```
 
-<p align="center">
-  <i>Разработано с душой для свободы интернета. Пусть цифровой туман рассеется! ✨</i>
-</p>
+## License
+
+MIT

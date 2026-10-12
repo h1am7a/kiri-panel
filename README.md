@@ -1,4 +1,4 @@
-# Kiri Panel
+# 🌸 Kiri Panel // 霧 (Cyber-Moe VPN Matrix)
 
 Lightweight management dashboard for **AmneziaWG** and **Hysteria 2**, designed for personal and family use. Generates unified **Mihomo (Clash.Meta)** subscription configs with automatic failover and split routing.
 

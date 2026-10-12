@@ -92,6 +92,14 @@ root hard nofile 1048576
 EOF
 ulimit -n 1048576 2>/dev/null || true
 
+# Настройка UFW (файрвола) если он активен
+if command -v ufw &>/dev/null && ufw status | grep -q "Status: active"; then
+  ufw allow 8080/tcp comment 'Kiri Panel Web UI' >/dev/null 2>&1 || true
+  ufw allow 51820/udp comment 'AmneziaWG' >/dev/null 2>&1 || true
+  ufw allow 443/udp comment 'Hysteria 2' >/dev/null 2>&1 || true
+  ufw allow 20000:50000/udp comment 'Hysteria 2 Hopping' >/dev/null 2>&1 || true
+fi
+
 # 5. Проверка и автоматическая установка Docker & Compose
 echo -e "${YELLOW}[3/6] 🐳 Проверка Docker и Docker Compose...${NC}"
 if ! command -v docker &> /dev/null; then

@@ -65,6 +65,8 @@ func (a *API) RegisterRoutes(r *gin.Engine) {
 		apiGroup.GET("/users/:id/raw-conf", a.GetUserRawConf)
 		apiGroup.GET("/config", a.GetConfig)
 		apiGroup.PUT("/config", a.UpdateConfig)
+		apiGroup.POST("/restart", a.RestartServices)
+		apiGroup.POST("/services/restart", a.RestartServices)
 
 		// 2. Hysteria 2 HTTP Auth Webhook
 		apiGroup.POST("/internal/hy2/auth", a.Hy2AuthWebhook)
@@ -756,3 +758,24 @@ func (a *API) findUser(ctx context.Context, param string) (*model.User, error) {
 
 	return nil, db.ErrNotFound
 }
+
+// RestartServices soft-restarts and re-synchronizes AWG interface and Hysteria 2 daemon.
+func (a *API) RestartServices(c *gin.Context) {
+	ctx := c.Request.Context()
+	cfg, err := a.db.GetServerConfig(ctx)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to load server config", "details": err.Error()})
+		return
+	}
+
+	if err := a.syncAWG(ctx); err != nil {
+		log.Printf("[API] Warning during service restart awg sync: %v", err)
+	}
+	a.syncHy2(cfg)
+
+	c.JSON(http.StatusOK, gin.H{
+		"ok":      true,
+		"message": "All gateway services reloaded and synchronized successfully",
+	})
+}
+

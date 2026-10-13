@@ -8,29 +8,61 @@ interface MascotState {
   clickCount: number;
   lastClickTime: number;
   timerId: ReturnType<typeof setTimeout> | null;
+  isVisible: boolean;
+  isMinimized: boolean;
   setMood: (mood: MascotMood, message?: string, durationMs?: number) => void;
   interact: () => void;
   resetToIdle: () => void;
+  toggleVisibility: () => void;
+  setIsVisible: (visible: boolean) => void;
+  toggleMinimized: () => void;
+  setIsMinimized: (minimized: boolean) => void;
 }
 
 const IDLE_QUOTES = [
-  "Семпай, туннель AmneziaWG замаскирован под чистый шум! Ни один цензор не догадается~ 🌸",
-  "Hysteria 2 Gecko работает на полной скорости! Трафик летит как лазерный луч~ ⚡",
-  "Я внимательно слежу за маршрутами твоей семьи. Ни единого дропа пакетов!",
-  "Системные показатели в норме. Все пиры зашифрованы по высшему разряду~ 🛡️",
-  "Нужна новая подписка для Mihomo? Просто нажми кнопку рядом с пользователем!",
-  "Kiri Panel активна. Твой личный кибер-страж всегда на посту~ (｡♥‿♥｡)"
+  "Senpai, AmneziaWG junk-packet masking is humming smoothly! No DPI firewall can detect us~ 🌸",
+  "Hysteria 2 Gecko protocol is accelerating at full throttle! Latency is down to laser speed~ ⚡",
+  "All family routing tables are encrypted and verified. Zero packet loss detected! 🛡️",
+  "Quantum-grade obfuscation engaged. Your connections are 100% invisible to censors~ ✨",
+  "Need a client configuration for Mihomo? Just tap the subscription button next to any peer! 📋",
+  "Kiri Security Sentinel online. Your personal cyber guardian is always standing by~ (｡♥‿♥｡)",
+  "Traffic throughput is looking pristine today! Enjoy seamless, unrestricted browsing, Senpai~ 🌐"
 ];
 
 const CLICK_QUOTES: { mood: MascotMood; text: string }[] = [
-  { mood: 'happy', text: "Ой! Привет, семпай! Проверяешь статус сети? ✨" },
-  { mood: 'proud', text: "Хе-хе, я отлично справляюсь с маршрутизацией, правда? 💫" },
-  { mood: 'happy', text: "Gecko-обфускация активирована! За нами не уследят! 🚀" },
-  { mood: 'proud', text: "Вся семья защищена квантовым шифрованием Kiri Security! 🛡️" },
-  { mood: 'pout', text: "Эй, щекотно же! Ты на меня кликаешь вместо работы? >_<" },
-  { mood: 'pout', text: "Хватит тыкать, семпай! Иначе перенаправлю твои пакеты на луну! 💢" },
-  { mood: 'happy', text: "Ладно-ладно, я не обижаюсь! Люблю, когда ты рядом~ 💖" }
+  { mood: 'happy', text: "Kyaa! Hello Senpai! Checking up on the network telemetry? ✨" },
+  { mood: 'proud', text: "Hehe, my obfuscation algorithms are running at 99.9% efficiency, aren't they? 💫" },
+  { mood: 'happy', text: "Salamander UDP masking active! Not even deep packet inspection can track our packets! 🚀" },
+  { mood: 'proud', text: "Your entire family is guarded under Kiri Sentinel's quantum shield! Leave it to me! 🛡️" },
+  { mood: 'pout', text: "Hey, that tickles! Are you poking me instead of doing your sysadmin duties? >_<" },
+  { mood: 'pout', text: "Mou... Stop poking, Senpai! Or I'll route all your traffic to the lunar relay! 💢" },
+  { mood: 'happy', text: "Just teasing~ I'm always happy to keep you and your network safe! 💖" }
 ];
+
+const STORAGE_KEY_VISIBLE = 'kiri_mascot_visible';
+const STORAGE_KEY_MINIMIZED = 'kiri_mascot_minimized';
+
+function getInitialVisibility(): boolean {
+  if (typeof window === 'undefined') return true;
+  try {
+    const val = localStorage.getItem(STORAGE_KEY_VISIBLE);
+    if (val !== null) return val === 'true';
+  } catch (e) {
+    console.warn('Failed to read mascot visibility from localStorage', e);
+  }
+  return true;
+}
+
+function getInitialMinimized(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const val = localStorage.getItem(STORAGE_KEY_MINIMIZED);
+    if (val !== null) return val === 'true';
+  } catch (e) {
+    console.warn('Failed to read mascot minimized state from localStorage', e);
+  }
+  return false;
+}
 
 export const useMascotStore = create<MascotState>((set, get) => ({
   mood: 'idle',
@@ -38,6 +70,8 @@ export const useMascotStore = create<MascotState>((set, get) => ({
   clickCount: 0,
   lastClickTime: 0,
   timerId: null,
+  isVisible: getInitialVisibility(),
+  isMinimized: getInitialMinimized(),
 
   setMood: (mood, message, durationMs = 6000) => {
     const currentTimer = get().timerId;
@@ -90,5 +124,43 @@ export const useMascotStore = create<MascotState>((set, get) => ({
       message: IDLE_QUOTES[Math.floor(Math.random() * IDLE_QUOTES.length)],
       timerId: null,
     });
+  },
+
+  toggleVisibility: () => {
+    const next = !get().isVisible;
+    try {
+      localStorage.setItem(STORAGE_KEY_VISIBLE, String(next));
+    } catch {
+      // ignore
+    }
+    set({ isVisible: next });
+  },
+
+  setIsVisible: (visible: boolean) => {
+    try {
+      localStorage.setItem(STORAGE_KEY_VISIBLE, String(visible));
+    } catch {
+      // ignore
+    }
+    set({ isVisible: visible });
+  },
+
+  toggleMinimized: () => {
+    const next = !get().isMinimized;
+    try {
+      localStorage.setItem(STORAGE_KEY_MINIMIZED, String(next));
+    } catch {
+      // ignore
+    }
+    set({ isMinimized: next });
+  },
+
+  setIsMinimized: (minimized: boolean) => {
+    try {
+      localStorage.setItem(STORAGE_KEY_MINIMIZED, String(minimized));
+    } catch {
+      // ignore
+    }
+    set({ isMinimized: minimized });
   },
 }));

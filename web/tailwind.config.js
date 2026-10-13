@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -25,6 +26,24 @@ export default {
           dimPink: 'rgba(255, 42, 133, 0.15)',
           dimPurple: 'rgba(192, 132, 252, 0.15)',
         },
+        sakura: {
+          50: '#FDF2F8',
+          100: '#FCE7F3',
+          200: '#FBCFE8',
+          300: '#F9A8D4',
+          400: '#F472B6',
+          500: '#EC4899',
+          600: '#DB2777',
+        },
+        aoi: {
+          50: '#F0F9FF',
+          100: '#E0F2FE',
+          200: '#BAE6FD',
+          300: '#7DD3FC',
+          400: '#38BDF8',
+          500: '#0EA5E9',
+          600: '#0284C7',
+        },
       },
       fontFamily: {
         sans: ['Outfit', 'Nunito', 'system-ui', 'sans-serif'],
@@ -35,18 +54,25 @@ export default {
         'neon-cyan': '0 0 15px rgba(0, 240, 255, 0.4), 0 0 30px rgba(0, 240, 255, 0.15)',
         'neon-pink': '0 0 15px rgba(255, 42, 133, 0.4), 0 0 30px rgba(255, 42, 133, 0.15)',
         'neon-purple': '0 0 15px rgba(192, 132, 252, 0.4), 0 0 30px rgba(192, 132, 252, 0.15)',
-        'hud': '0 8px 32px 0 rgba(0, 0, 0, 0.45)',
+        'hud': '0 8px 32px 0 rgba(0, 0, 0, 0.35)',
+        'soft-glow': '0 4px 20px -2px rgba(0, 0, 0, 0.12)',
+        'sakura': '0 4px 24px -2px rgba(236, 72, 153, 0.25)',
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'float': 'float 4s ease-in-out infinite',
         'glow-pulse': 'glow 2s ease-in-out infinite alternate',
         'scanline': 'scanline 8s linear infinite',
+        'bounce-subtle': 'bounceSubtle 2.5s ease-in-out infinite',
       },
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-6px)' },
+        },
+        bounceSubtle: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-3px)' },
         },
         glow: {
           'from': { opacity: '0.6' },

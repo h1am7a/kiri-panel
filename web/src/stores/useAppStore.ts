@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { User, ServiceStatus, SystemStats } from '../types';
+import { User, ServiceStatus, SystemStats, NavTab } from '../types';
 import { soundFx } from '../utils/soundFx';
 
 interface AppState {
@@ -11,8 +11,10 @@ interface AppState {
   selectedUserForQr: User | null;
   isAddUserModalOpen: boolean;
   searchQuery: string;
+  activeTab: NavTab;
 
   // Actions
+  setActiveTab: (tab: NavTab) => void;
   fetchUsers: () => Promise<void>;
   fetchStatus: () => Promise<void>;
   toggleSfx: () => void;
@@ -30,35 +32,35 @@ interface AppState {
 const INITIAL_USERS: User[] = [
   {
     id: 'usr-1',
-    name: 'Мама (Mama)',
+    name: 'Mom (iPhone 15)',
     avatar: '🌸',
     device: 'iPhone 15 • Mihomo iOS',
     role: 'family',
     isActive: true,
     ipAddress: '10.8.0.2',
-    hysteriaAuth: 'hy2_mama_gecko_auth',
+    hysteriaAuth: 'hy2_mom_gecko_auth',
     rxBytes: 4294967296 * 3.8, // ~16.3 GB
     txBytes: 1073741824 * 1.4, // ~1.5 GB
-    lastSeen: 'Сейчас в сети',
+    lastSeen: 'Online now',
     createdAt: '2026-09-01',
   },
   {
     id: 'usr-2',
-    name: 'Папа (Papa)',
+    name: 'Dad (Pixel 8 Pro)',
     avatar: '⚡',
     device: 'Pixel 8 Pro • AmneziaWG',
     role: 'family',
     isActive: true,
     ipAddress: '10.8.0.3',
-    hysteriaAuth: 'hy2_papa_gecko_auth',
+    hysteriaAuth: 'hy2_dad_gecko_auth',
     rxBytes: 4294967296 * 8.2, // ~35.2 GB
     txBytes: 1073741824 * 4.9, // ~5.2 GB
-    lastSeen: '12 мин назад',
+    lastSeen: '12m ago',
     createdAt: '2026-09-01',
   },
   {
     id: 'usr-3',
-    name: 'Сестра (Sister)',
+    name: 'Sister (MacBook & iPad)',
     avatar: '🎀',
     device: 'iPad Pro + MacBook Air',
     role: 'family',
@@ -67,12 +69,12 @@ const INITIAL_USERS: User[] = [
     hysteriaAuth: 'hy2_sis_gecko_auth',
     rxBytes: 4294967296 * 12.5, // ~53.6 GB
     txBytes: 1073741824 * 3.1, // ~3.3 GB
-    lastSeen: 'Сейчас в сети',
+    lastSeen: 'Online now',
     createdAt: '2026-09-05',
   },
   {
     id: 'usr-4',
-    name: 'Гостевой ноутбук (Guest)',
+    name: 'Guest (ThinkPad X1)',
     avatar: '🦊',
     device: 'ThinkPad X1 Carbon',
     role: 'guest',
@@ -81,7 +83,7 @@ const INITIAL_USERS: User[] = [
     hysteriaAuth: 'hy2_guest_gecko_auth',
     rxBytes: 1073741824 * 2.1,
     txBytes: 524288000,
-    lastSeen: '3 дня назад',
+    lastSeen: '3 days ago',
     createdAt: '2026-10-01',
   },
 ];
@@ -91,6 +93,7 @@ export const useAppStore = create<AppState>((set, get) => {
 
   return {
     users: INITIAL_USERS,
+    activeTab: 'overview',
     systemStats: {
       cpuUsagePercent: 14,
       memoryUsagePercent: 28,
@@ -106,7 +109,7 @@ export const useAppStore = create<AppState>((set, get) => {
       protocol: 'UDP (Junk Packets)',
       status: 'online',
       peersCount: 4,
-      uptime: '18 дней 4 часа',
+      uptime: '18d 4h',
       obfuscation: 'Jc=4 Jmin=40 Jmax=70 S1=15 S2=35 H1=1... H4=4...',
       currentSpeedMbps: {
         download: 142.8,
@@ -120,7 +123,7 @@ export const useAppStore = create<AppState>((set, get) => {
       protocol: 'QUIC / UDP 443',
       status: 'online',
       peersCount: 3,
-      uptime: '18 дней 4 часа',
+      uptime: '18d 4h',
       obfuscation: 'Salamander / Gecko Masking',
       currentSpeedMbps: {
         download: 320.5,
@@ -131,6 +134,11 @@ export const useAppStore = create<AppState>((set, get) => {
     selectedUserForQr: null,
     isAddUserModalOpen: false,
     searchQuery: '',
+
+    setActiveTab: (tab: NavTab) => {
+      soundFx.bleep();
+      set({ activeTab: tab });
+    },
 
     // Actions
     fetchUsers: async () => {
@@ -143,14 +151,14 @@ export const useAppStore = create<AppState>((set, get) => {
               id: String(u.id),
               name: u.username || u.name,
               avatar: u.role === 'guest' ? '🐱' : '✨',
-              device: u.device || 'Устройство пользователя',
+              device: u.device || 'Client Device',
               role: (u.role === 'guest' ? 'guest' : 'family') as 'family' | 'guest',
               isActive: u.enabled ?? u.isActive ?? true,
               ipAddress: u.awg_ipv4 || u.ipAddress || '10.8.0.2',
               hysteriaAuth: u.hy2_token || u.hysteriaAuth || '',
               rxBytes: u.used_traffic || u.rxBytes || 0,
               txBytes: u.txBytes || 0,
-              lastSeen: 'В сети',
+              lastSeen: 'Online',
               createdAt: u.created_at ? new Date(u.created_at).toISOString().split('T')[0] : '2026-10-12',
             }));
             set({ users: mappedUsers });
@@ -236,7 +244,7 @@ export const useAppStore = create<AppState>((set, get) => {
             hysteriaAuth: created.hy2_token || '',
             rxBytes: 0,
             txBytes: 0,
-            lastSeen: 'Только что создан',
+            lastSeen: 'Just created',
             createdAt: new Date().toISOString().split('T')[0],
           };
           set((state) => ({
@@ -263,7 +271,7 @@ export const useAppStore = create<AppState>((set, get) => {
         hysteriaAuth: `hy2_${name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${Math.random().toString(36).substring(2, 7)}`,
         rxBytes: 0,
         txBytes: 0,
-        lastSeen: 'Только что создан',
+        lastSeen: 'Just created',
         createdAt: new Date().toISOString().split('T')[0],
       };
 
@@ -310,7 +318,6 @@ export const useAppStore = create<AppState>((set, get) => {
 
     getMihomoSubscriptionUrl: (userId) => {
       const origin = typeof window !== 'undefined' ? window.location.origin : 'https://kiri.local';
-      // Find user to get token if id is numeric
       const u = get().users.find((user) => user.id === userId);
       const token = u?.hysteriaAuth || userId;
       return `${origin}/sub/${token}/mihomo.yaml`;

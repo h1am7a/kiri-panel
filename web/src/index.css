@@ -11,15 +11,47 @@
   }
 
   body {
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Dark Theme (Midnight Slate / OLED default) */
+  html.dark body,
+  :root:not(.light):not(.cyber) body {
     background-color: #0B0F19;
-    background-image: 
-      radial-gradient(circle at 15% 20%, rgba(255, 42, 133, 0.08) 0%, transparent 40%),
-      radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.09) 0%, transparent 45%),
-      radial-gradient(circle at 50% 80%, rgba(192, 132, 252, 0.06) 0%, transparent 50%),
-      linear-gradient(rgba(11, 15, 25, 0.94), rgba(11, 15, 25, 0.94)),
-      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0, 240, 255, 0.03) 40px),
-      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0, 240, 255, 0.03) 40px);
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(255, 42, 133, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.06) 0%, transparent 45%),
+      radial-gradient(circle at 50% 80%, rgba(192, 132, 252, 0.04) 0%, transparent 50%),
+      linear-gradient(rgba(11, 15, 25, 0.96), rgba(11, 15, 25, 0.96));
     background-attachment: fixed;
+    color: #F1F5F9;
+  }
+
+  /* Light Theme (Sakura White / Crisp Aoi Edition) */
+  html.light body {
+    background-color: #F8FAFC;
+    background-image:
+      radial-gradient(circle at 10% 15%, rgba(244, 114, 182, 0.09) 0%, transparent 35%),
+      radial-gradient(circle at 90% 25%, rgba(14, 165, 233, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 50% 85%, rgba(192, 132, 252, 0.06) 0%, transparent 45%),
+      linear-gradient(rgba(248, 250, 252, 0.97), rgba(248, 250, 252, 0.97));
+    background-attachment: fixed;
+    color: #0F172A;
+  }
+
+  /* Cyber Theme (Neon Dark) */
+  html.cyber body {
+    background-color: #060911;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(255, 42, 133, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.14) 0%, transparent 45%),
+      radial-gradient(circle at 50% 80%, rgba(192, 132, 252, 0.08) 0%, transparent 50%),
+      linear-gradient(rgba(6, 9, 17, 0.94), rgba(6, 9, 17, 0.94)),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0, 240, 255, 0.04) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0, 240, 255, 0.04) 40px);
+    background-attachment: fixed;
+    color: #FFFFFF;
   }
 
   /* Custom scrollbar */
@@ -28,123 +60,194 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #060911;
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #1e2c4a;
-    border-radius: 3px;
+    background: rgba(100, 116, 139, 0.35);
+    border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #00F0FF;
+    background: rgba(0, 240, 255, 0.6);
+  }
+  html.light ::-webkit-scrollbar-thumb {
+    background: rgba(203, 213, 225, 0.8);
+  }
+  html.light ::-webkit-scrollbar-thumb:hover {
+    background: rgba(244, 114, 182, 0.8);
   }
 }
 
-/* Cyber-Moe HUD Chamfered Card Styles */
+/* ========================================================
+   MODERN ELEGANT HUD CARDS (No ugly clip-paths!)
+   ======================================================== */
 .hud-card {
   position: relative;
-  background: rgba(15, 22, 38, 0.75);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 240, 255, 0.2);
-  clip-path: polygon(
-    0 12px,
-    12px 0,
-    calc(100% - 12px) 0,
-    100% 12px,
-    100% calc(100% - 12px),
-    calc(100% - 12px) 100%,
-    12px 100%,
-    0 calc(100% - 12px)
-  );
+  border-radius: 0.875rem; /* rounded-xl */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hud-card:hover {
-  border-color: rgba(0, 240, 255, 0.5);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+/* Dark Theme Cards (Midnight Slate / OLED) */
+html.dark .hud-card,
+:root:not(.light):not(.cyber) .hud-card {
+  background: rgba(15, 22, 38, 0.72);
+  border: 1px solid rgba(51, 65, 85, 0.55);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
 }
 
+html.dark .hud-card:hover,
+:root:not(.light):not(.cyber) .hud-card:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.45);
+}
+
+/* Cyber Theme Cards (Neon Glow) */
+html.cyber .hud-card {
+  background: rgba(15, 22, 38, 0.85);
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.08);
+}
+
+html.cyber .hud-card:hover {
+  border-color: rgba(0, 240, 255, 0.6);
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.2);
+}
+
+/* Light Theme Cards (Sakura White / Crisp Aoi Edition) */
+html.light .hud-card {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
+  color: #0F172A;
+}
+
+html.light .hud-card:hover {
+  border-color: rgba(244, 114, 182, 0.45);
+  box-shadow: 0 10px 30px -4px rgba(244, 114, 182, 0.12), 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+/* HUD Card Pink Accent Variant */
 .hud-card-pink {
   position: relative;
-  background: rgba(15, 22, 38, 0.75);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 42, 133, 0.25);
-  clip-path: polygon(
-    0 12px,
-    12px 0,
-    calc(100% - 12px) 0,
-    100% 12px,
-    100% calc(100% - 12px),
-    calc(100% - 12px) 100%,
-    12px 100%,
-    0 calc(100% - 12px)
-  );
+  border-radius: 0.875rem; /* rounded-xl */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hud-card-pink:hover {
-  border-color: rgba(255, 42, 133, 0.55);
-  box-shadow: 0 0 20px rgba(255, 42, 133, 0.2);
+html.dark .hud-card-pink,
+:root:not(.light):not(.cyber) .hud-card-pink {
+  background: rgba(15, 22, 38, 0.72);
+  border: 1px solid rgba(255, 42, 133, 0.3);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
 }
 
-/* Cut corners with 4 HUD corner brackets */
-.hud-corner-tl {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 8px;
-  height: 8px;
-  border-top: 2px solid #00F0FF;
-  border-left: 2px solid #00F0FF;
-  pointer-events: none;
+html.dark .hud-card-pink:hover,
+:root:not(.light):not(.cyber) .hud-card-pink:hover {
+  border-color: rgba(255, 42, 133, 0.6);
+  box-shadow: 0 8px 30px -4px rgba(255, 42, 133, 0.15);
 }
 
-.hud-corner-tr {
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 8px;
-  height: 8px;
-  border-top: 2px solid #00F0FF;
-  border-right: 2px solid #00F0FF;
-  pointer-events: none;
+html.cyber .hud-card-pink {
+  background: rgba(15, 22, 38, 0.85);
+  border: 1px solid rgba(255, 42, 133, 0.35);
+  box-shadow: 0 0 15px rgba(255, 42, 133, 0.12);
 }
 
-.hud-corner-bl {
-  position: absolute;
-  bottom: 3px;
-  left: 3px;
-  width: 8px;
-  height: 8px;
-  border-bottom: 2px solid #00F0FF;
-  border-left: 2px solid #00F0FF;
-  pointer-events: none;
+html.cyber .hud-card-pink:hover {
+  border-color: rgba(255, 42, 133, 0.7);
+  box-shadow: 0 0 25px rgba(255, 42, 133, 0.25);
 }
 
+html.light .hud-card-pink {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(244, 114, 182, 0.4);
+  box-shadow: 0 4px 20px -2px rgba(236, 72, 153, 0.09);
+  color: #0F172A;
+}
+
+html.light .hud-card-pink:hover {
+  border-color: rgba(236, 72, 153, 0.65);
+  box-shadow: 0 10px 30px -4px rgba(236, 72, 153, 0.18);
+}
+
+/* Corner bracket elements: Clean, subtle or hidden in dark/light to prevent visual clutter */
+.hud-corner-tl,
+.hud-corner-tr,
+.hud-corner-bl,
 .hud-corner-br {
+  display: none;
+}
+
+html.cyber .hud-corner-tl {
+  display: block;
   position: absolute;
-  bottom: 3px;
-  right: 3px;
-  width: 8px;
-  height: 8px;
-  border-bottom: 2px solid #00F0FF;
-  border-right: 2px solid #00F0FF;
+  top: 4px;
+  left: 4px;
+  width: 6px;
+  height: 6px;
+  border-top: 1.5px solid #00F0FF;
+  border-left: 1.5px solid #00F0FF;
   pointer-events: none;
 }
 
-/* Neon Glow Texts */
+html.cyber .hud-corner-tr {
+  display: block;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-top: 1.5px solid #00F0FF;
+  border-right: 1.5px solid #00F0FF;
+  pointer-events: none;
+}
+
+html.cyber .hud-corner-bl {
+  display: block;
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  width: 6px;
+  height: 6px;
+  border-bottom: 1.5px solid #00F0FF;
+  border-left: 1.5px solid #00F0FF;
+  pointer-events: none;
+}
+
+html.cyber .hud-corner-br {
+  display: block;
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-bottom: 1.5px solid #00F0FF;
+  border-right: 1.5px solid #00F0FF;
+  pointer-events: none;
+}
+
+/* Text glow utilities */
 .text-glow-cyan {
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 20px rgba(0, 240, 255, 0.4);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 20px rgba(0, 240, 255, 0.3);
 }
 
 .text-glow-pink {
-  text-shadow: 0 0 10px rgba(255, 42, 133, 0.7), 0 0 20px rgba(255, 42, 133, 0.4);
+  text-shadow: 0 0 10px rgba(255, 42, 133, 0.7), 0 0 20px rgba(255, 42, 133, 0.3);
 }
 
 .text-glow-purple {
-  text-shadow: 0 0 10px rgba(192, 132, 252, 0.7), 0 0 20px rgba(192, 132, 252, 0.4);
+  text-shadow: 0 0 10px rgba(192, 132, 252, 0.7), 0 0 20px rgba(192, 132, 252, 0.3);
 }
 
-/* Scanline Overlay */
+html.light .text-glow-cyan,
+html.light .text-glow-pink,
+html.light .text-glow-purple {
+  text-shadow: none;
+}
+
+/* Scanline Overlay (Cyber theme only) */
 .scanlines {
   background: linear-gradient(
     rgba(18, 16, 16, 0) 50%, 
@@ -159,15 +262,71 @@
   pointer-events: none;
 }
 
-/* Speech Bubble triangle */
-.bubble-tail-right {
-  position: absolute;
-  right: -10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-left: 10px solid rgba(15, 22, 38, 0.95);
+html.light .scanlines {
+  display: none;
+}
+
+/* Light Mode Overrides for Perfect Contrast & Crisp Typography */
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light .text-white {
+  color: #0F172A;
+}
+
+html.light .text-slate-100 {
+  color: #0F172A;
+}
+
+html.light .text-slate-200,
+html.light .text-slate-300 {
+  color: #334155;
+}
+
+html.light .text-slate-400 {
+  color: #64748B;
+}
+
+html.light .text-slate-500 {
+  color: #94A3B8;
+}
+
+html.light .border-slate-800,
+html.light .border-slate-700 {
+  border-color: #E2E8F0;
+}
+
+html.light .bg-cosmic-950,
+html.light .bg-cosmic-950\/90,
+html.light .bg-cosmic-950\/80 {
+  background-color: #F1F5F9;
+}
+
+html.light .bg-cosmic-900 {
+  background-color: #F8FAFC;
+}
+
+html.light .bg-cosmic-850,
+html.light .bg-cosmic-850\/90,
+html.light .bg-cosmic-850\/95 {
+  background-color: #FFFFFF;
+}
+
+html.light .bg-cosmic-800 {
+  background-color: #F1F5F9;
+}
+
+html.light .divide-slate-800\/80 > * + * {
+  border-color: #F1F5F9;
+}
+
+html.light .border-cyber-cyan\/20,
+html.light .border-cyber-cyan\/30 {
+  border-color: rgba(14, 165, 233, 0.25);
+}
+
+html.light .border-cyber-pink\/20,
+html.light .border-cyber-pink\/30 {
+  border-color: rgba(236, 72, 153, 0.25);
 }

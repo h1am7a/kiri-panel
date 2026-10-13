@@ -15,18 +15,13 @@ export const StatusCards: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-      {/* 1. AmneziaWG Obfuscated Card */}
+      
+      {/* 1. AmneziaWG Obfuscated Inbound Card */}
       <div className="hud-card p-5 group relative overflow-hidden">
-        {/* HUD Corner Accents */}
-        <div className="hud-corner-tl" />
-        <div className="hud-corner-tr" />
-        <div className="hud-corner-bl" />
-        <div className="hud-corner-br" />
-
         {/* Card Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded bg-cyber-cyan/10 border border-cyber-cyan/40 flex items-center justify-center text-cyber-cyan shadow-neon-cyan">
+            <div className="w-10 h-10 rounded-xl bg-cyber-cyan/10 border border-cyber-cyan/40 flex items-center justify-center text-cyber-cyan shadow-sm">
               <Shield className="w-5 h-5" />
             </div>
             <div>
@@ -34,7 +29,7 @@ export const StatusCards: React.FC = () => {
                 <h3 className="font-mono font-bold text-white tracking-wide text-sm">
                   AMNEZIA-WG
                 </h3>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/30">
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/30">
                   AWG0
                 </span>
               </div>
@@ -42,7 +37,7 @@ export const StatusCards: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-950/60 border border-emerald-500/40 text-[11px] font-mono text-emerald-400">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono text-emerald-400">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>PORT {awgService.port}</span>
           </div>
@@ -53,15 +48,15 @@ export const StatusCards: React.FC = () => {
           <div className="flex items-center justify-between text-slate-300 pb-2 border-b border-slate-800">
             <span className="flex items-center gap-1.5 text-slate-400">
               <Users className="w-3.5 h-3.5 text-cyber-cyan" />
-              Подключенные пиры:
+              Connected Peers:
             </span>
-            <span className="font-semibold text-cyber-cyan">{awgService.peersCount} активных</span>
+            <span className="font-semibold text-cyber-cyan">{awgService.peersCount} active</span>
           </div>
 
           <div className="flex items-center justify-between text-slate-300 pb-2 border-b border-slate-800">
             <span className="flex items-center gap-1.5 text-slate-400">
               <Radio className="w-3.5 h-3.5 text-cyber-pink" />
-              Текущая скорость:
+              Real-time Speed:
             </span>
             <span className="text-white">
               ↓ {awgService.currentSpeedMbps.download} Mb/s · ↑ {awgService.currentSpeedMbps.upload} Mb/s
@@ -70,28 +65,22 @@ export const StatusCards: React.FC = () => {
 
           <div className="pt-1">
             <div className="text-[10px] text-slate-500 mb-1 uppercase tracking-wider flex justify-between">
-              <span>Параметры AWG шума</span>
+              <span>AWG Noise Parameters</span>
               <span className="text-cyber-cyan font-bold">ANTI-DPI [OK]</span>
             </div>
-            <div className="text-[10px] font-mono bg-cosmic-950/80 p-2 rounded border border-cyber-cyan/20 text-cyber-cyan truncate" title={awgService.obfuscation}>
+            <div className="text-[10px] font-mono bg-cosmic-950/80 p-2 rounded-lg border border-cyber-cyan/20 text-cyber-cyan truncate" title={awgService.obfuscation}>
               {awgService.obfuscation}
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2. Hysteria 2 Gecko Card */}
+      {/* 2. Hysteria 2 Gecko Protocol Card */}
       <div className="hud-card-pink p-5 group relative overflow-hidden">
-        {/* HUD Corner Accents */}
-        <div className="absolute top-[3px] left-[3px] w-2 h-2 border-t-2 border-l-2 border-cyber-pink pointer-events-none" />
-        <div className="absolute top-[3px] right-[3px] w-2 h-2 border-t-2 border-r-2 border-cyber-pink pointer-events-none" />
-        <div className="absolute bottom-[3px] left-[3px] w-2 h-2 border-b-2 border-l-2 border-cyber-pink pointer-events-none" />
-        <div className="absolute bottom-[3px] right-[3px] w-2 h-2 border-b-2 border-r-2 border-cyber-pink pointer-events-none" />
-
         {/* Card Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded bg-cyber-pink/10 border border-cyber-pink/40 flex items-center justify-center text-cyber-pink shadow-neon-pink">
+            <div className="w-10 h-10 rounded-xl bg-cyber-pink/10 border border-cyber-pink/40 flex items-center justify-center text-cyber-pink shadow-sm">
               <Zap className="w-5 h-5" />
             </div>
             <div>
@@ -99,7 +88,7 @@ export const StatusCards: React.FC = () => {
                 <h3 className="font-mono font-bold text-white tracking-wide text-sm">
                   HYSTERIA 2
                 </h3>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cyber-pink/20 text-cyber-pink border border-cyber-pink/30">
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-cyber-pink/20 text-cyber-pink border border-cyber-pink/30">
                   QUIC GECKO
                 </span>
               </div>
@@ -107,7 +96,7 @@ export const StatusCards: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-pink-950/60 border border-cyber-pink/40 text-[11px] font-mono text-cyber-pink">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-pink-500/10 border border-cyber-pink/40 text-[11px] font-mono text-cyber-pink">
             <span className="w-2 h-2 rounded-full bg-cyber-pink animate-pulse" />
             <span>PORT {hy2Service.port}</span>
           </div>
@@ -118,15 +107,15 @@ export const StatusCards: React.FC = () => {
           <div className="flex items-center justify-between text-slate-300 pb-2 border-b border-slate-800">
             <span className="flex items-center gap-1.5 text-slate-400">
               <Network className="w-3.5 h-3.5 text-cyber-pink" />
-              QUIC Коннекты:
+              QUIC Connections:
             </span>
-            <span className="font-semibold text-cyber-pink">{hy2Service.peersCount} устройств</span>
+            <span className="font-semibold text-cyber-pink">{hy2Service.peersCount} active</span>
           </div>
 
           <div className="flex items-center justify-between text-slate-300 pb-2 border-b border-slate-800">
             <span className="flex items-center gap-1.5 text-slate-400">
               <Radio className="w-3.5 h-3.5 text-cyber-purple" />
-              Пиковая скорость:
+              Peak Throughput:
             </span>
             <span className="text-white">
               ↓ {hy2Service.currentSpeedMbps.download} Mb/s · ↑ {hy2Service.currentSpeedMbps.upload} Mb/s
@@ -135,10 +124,10 @@ export const StatusCards: React.FC = () => {
 
           <div className="pt-1">
             <div className="text-[10px] text-slate-500 mb-1 uppercase tracking-wider flex justify-between">
-              <span>Режим маскировки</span>
-              <span className="text-cyber-pink font-bold">BRUTAL CONGESTION [ON]</span>
+              <span>Masking Profile</span>
+              <span className="text-cyber-pink font-bold">BRUTAL BBR [ACTIVE]</span>
             </div>
-            <div className="text-[10px] font-mono bg-cosmic-950/80 p-2 rounded border border-cyber-pink/20 text-cyber-pink truncate">
+            <div className="text-[10px] font-mono bg-cosmic-950/80 p-2 rounded-lg border border-cyber-pink/20 text-cyber-pink truncate">
               {hy2Service.obfuscation}
             </div>
           </div>
@@ -147,16 +136,10 @@ export const StatusCards: React.FC = () => {
 
       {/* 3. Global System & Traffic Card */}
       <div className="hud-card p-5 group relative overflow-hidden">
-        {/* HUD Corner Accents */}
-        <div className="hud-corner-tl" />
-        <div className="hud-corner-tr" />
-        <div className="hud-corner-bl" />
-        <div className="hud-corner-br" />
-
         {/* Card Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded bg-cyber-purple/10 border border-cyber-purple/40 flex items-center justify-center text-cyber-purple shadow-neon-purple">
+            <div className="w-10 h-10 rounded-xl bg-cyber-purple/10 border border-cyber-purple/40 flex items-center justify-center text-cyber-purple shadow-sm">
               <Server className="w-5 h-5" />
             </div>
             <div>
@@ -164,15 +147,15 @@ export const StatusCards: React.FC = () => {
                 <h3 className="font-mono font-bold text-white tracking-wide text-sm">
                   TOTAL TRAFFIC
                 </h3>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cyber-purple/20 text-cyber-purple border border-cyber-purple/30">
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-cyber-purple/20 text-cyber-purple border border-cyber-purple/30">
                   GATEWAY
                 </span>
               </div>
-              <p className="text-[11px] font-mono text-slate-400">Всего через сервер</p>
+              <p className="text-[11px] font-mono text-slate-400">Aggregated Server Flow</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-purple-950/60 border border-cyber-purple/40 text-[11px] font-mono text-cyber-purple">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-500/10 border border-cyber-purple/40 text-[11px] font-mono text-cyber-purple">
             <span className="w-2 h-2 rounded-full bg-cyber-purple animate-pulse" />
             <span>UPTIME 18D</span>
           </div>
@@ -183,7 +166,7 @@ export const StatusCards: React.FC = () => {
           <div className="flex items-center justify-between text-slate-300 pb-2 border-b border-slate-800">
             <span className="flex items-center gap-1.5 text-slate-400">
               <ArrowDownToLine className="w-3.5 h-3.5 text-cyber-cyan" />
-              Скачано (RX):
+              Downloaded (RX):
             </span>
             <span className="font-bold text-cyber-cyan text-sm">
               {formatBytes(systemStats.totalRxBytes)}
@@ -193,7 +176,7 @@ export const StatusCards: React.FC = () => {
           <div className="flex items-center justify-between text-slate-300 pb-2 border-b border-slate-800">
             <span className="flex items-center gap-1.5 text-slate-400">
               <ArrowUpFromLine className="w-3.5 h-3.5 text-cyber-pink" />
-              Отдано (TX):
+              Uploaded (TX):
             </span>
             <span className="font-bold text-cyber-pink text-sm">
               {formatBytes(systemStats.totalTxBytes)}
@@ -202,7 +185,7 @@ export const StatusCards: React.FC = () => {
 
           <div className="pt-1">
             <div className="flex justify-between text-[11px] text-slate-400 mb-1">
-              <span>Память контейнера</span>
+              <span>Memory Allocation</span>
               <span className="text-cyber-purple font-semibold">{systemStats.memoryUsagePercent}% / 512 MB</span>
             </div>
             <div className="w-full bg-cosmic-950 h-2 rounded-full overflow-hidden border border-cyber-purple/20">
@@ -214,6 +197,7 @@ export const StatusCards: React.FC = () => {
           </div>
         </div>
       </div>
+
     </div>
   );
 };

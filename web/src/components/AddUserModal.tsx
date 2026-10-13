@@ -19,13 +19,13 @@ export const AddUserModal: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError('Пожалуйста, укажи имя или никнейм');
+      setError('Please provide a name or alias');
       return;
     }
 
     addUser(name.trim(), device.trim(), role);
 
-    // Trigger sweet Cyber-Moe confetti explosion
+    // Confetti explosion
     try {
       confetti({
         particleCount: 50,
@@ -37,7 +37,7 @@ export const AddUserModal: React.FC = () => {
       // ignore
     }
 
-    setMood('happy', `Добро пожаловать в Kiri Network, ${name}! Новые ключи успешно сгенерированы~ 🎉`, 5000);
+    setMood('happy', `Welcome to Kiri Network, ${name}! New obfuscated credentials enrolled successfully~ 🎉`, 5000);
     setName('');
     setDevice('');
     setError('');
@@ -46,27 +46,21 @@ export const AddUserModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
       <div 
-        className="relative w-full max-w-md bg-cosmic-850 border border-cyber-pink/40 rounded-xl p-6 shadow-neon-pink overflow-hidden"
+        className="relative w-full max-w-md bg-cosmic-850 border border-cyber-pink/40 rounded-2xl p-6 shadow-neon-pink overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* HUD corner accents */}
-        <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyber-pink" />
-        <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-cyber-pink" />
-        <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-cyber-pink" />
-        <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-cyber-pink" />
-
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-4 border-b border-cyber-pink/20">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded bg-cyber-pink/10 border border-cyber-pink/30 text-cyber-pink shadow-neon-pink">
+            <div className="p-2 rounded-xl bg-cyber-pink/10 border border-cyber-pink/30 text-cyber-pink shadow-sm">
               <UserPlus className="w-5 h-5" />
             </div>
             <div>
               <h3 className="font-mono font-bold text-white text-base">
-                НОВЫЙ КЛИЕНТ // PEER ENROLL
+                NEW CLIENT // PEER ENROLL
               </h3>
               <p className="text-xs font-mono text-slate-400">
-                Генерация ключей AmneziaWG + Hysteria 2
+                Generate AmneziaWG + Hysteria 2 Credentials
               </p>
             </div>
           </div>
@@ -86,7 +80,7 @@ export const AddUserModal: React.FC = () => {
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           <div>
             <label className="block text-xs font-mono font-semibold text-slate-300 uppercase mb-1.5">
-              Имя или Устройство <span className="text-cyber-pink">*</span>
+              Peer Name or Alias <span className="text-cyber-pink">*</span>
             </label>
             <input
               type="text"
@@ -95,7 +89,7 @@ export const AddUserModal: React.FC = () => {
                 setName(e.target.value);
                 if (error) setError('');
               }}
-              placeholder="Например: Братишка (Brother) или iPhone 16"
+              placeholder="e.g., Mom's iPhone or Work Laptop"
               className="w-full px-3.5 py-2.5 rounded-lg bg-cosmic-950 border border-slate-700 text-white placeholder-slate-500 font-mono text-xs focus:outline-none focus:border-cyber-pink focus:shadow-neon-pink transition-all"
               autoFocus
             />
@@ -104,7 +98,7 @@ export const AddUserModal: React.FC = () => {
 
           <div>
             <label className="block text-xs font-mono font-semibold text-slate-300 uppercase mb-1.5">
-              Модель устройства / Клиент
+              Device Model / Client App
             </label>
             <div className="relative">
               <Smartphone className="absolute left-3 top-2.5 w-4 h-4 text-slate-500" />
@@ -112,7 +106,7 @@ export const AddUserModal: React.FC = () => {
                 type="text"
                 value={device}
                 onChange={(e) => setDevice(e.target.value)}
-                placeholder="Например: iPhone 15 Pro • Mihomo"
+                placeholder="e.g., iPhone 15 Pro • Mihomo"
                 className="w-full pl-9 pr-3.5 py-2.5 rounded-lg bg-cosmic-950 border border-slate-700 text-white placeholder-slate-500 font-mono text-xs focus:outline-none focus:border-cyber-cyan focus:shadow-neon-cyan transition-all"
               />
             </div>
@@ -120,7 +114,7 @@ export const AddUserModal: React.FC = () => {
 
           <div>
             <label className="block text-xs font-mono font-semibold text-slate-300 uppercase mb-1.5">
-              Уровень доступа
+              Access Tier
             </label>
             <div className="grid grid-cols-2 gap-2 font-mono text-xs">
               <button
@@ -129,7 +123,7 @@ export const AddUserModal: React.FC = () => {
                   soundFx.bleep();
                   setRole('family');
                 }}
-                className={`p-2.5 rounded-lg border text-left transition-all ${
+                className={`p-2.5 rounded-xl border text-left transition-all ${
                   role === 'family'
                     ? 'bg-cyber-dimPink border-cyber-pink text-cyber-pink font-bold shadow-neon-pink'
                     : 'bg-cosmic-950 border-slate-800 text-slate-400 hover:border-slate-600'
@@ -137,9 +131,9 @@ export const AddUserModal: React.FC = () => {
               >
                 <div className="flex items-center gap-1.5 mb-0.5">
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>Семья (Family)</span>
+                  <span>Family</span>
                 </div>
-                <p className="text-[10px] text-slate-400 font-normal">Без ограничений по трафику</p>
+                <p className="text-[10px] text-slate-400 font-normal">Full speed, unrestricted</p>
               </button>
 
               <button
@@ -148,7 +142,7 @@ export const AddUserModal: React.FC = () => {
                   soundFx.bleep();
                   setRole('guest');
                 }}
-                className={`p-2.5 rounded-lg border text-left transition-all ${
+                className={`p-2.5 rounded-xl border text-left transition-all ${
                   role === 'guest'
                     ? 'bg-cyber-dimCyan border-cyber-cyan text-cyber-cyan font-bold shadow-neon-cyan'
                     : 'bg-cosmic-950 border-slate-800 text-slate-400 hover:border-slate-600'
@@ -156,9 +150,9 @@ export const AddUserModal: React.FC = () => {
               >
                 <div className="flex items-center gap-1.5 mb-0.5">
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Гость (Guest)</span>
+                  <span>Guest</span>
                 </div>
-                <p className="text-[10px] text-slate-400 font-normal">Стандартный туннель</p>
+                <p className="text-[10px] text-slate-400 font-normal">Standard tunnel profile</p>
               </button>
             </div>
           </div>
@@ -172,14 +166,14 @@ export const AddUserModal: React.FC = () => {
               }}
               className="px-4 py-2.5 rounded-lg border border-slate-700 text-slate-300 font-mono text-xs hover:bg-white/5 transition-all"
             >
-              ОТМЕНА
+              CANCEL
             </button>
             <button
               type="submit"
               className="px-5 py-2.5 rounded-lg bg-cyber-pink text-white font-mono text-xs font-bold shadow-neon-pink hover:bg-cyber-pink/90 transition-all flex items-center gap-2"
             >
               <UserPlus className="w-4 h-4" />
-              <span>СОЗДАТЬ ПИР</span>
+              <span>ENROLL PEER</span>
             </button>
           </div>
         </form>

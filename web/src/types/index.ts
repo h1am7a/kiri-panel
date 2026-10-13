@@ -13,6 +13,11 @@ export interface User {
   createdAt: string;
 }
 
+export type Client = User;
+export type ClientRole = 'family' | 'guest' | 'admin';
+
+export type NavTab = 'overview' | 'clients' | 'inbounds' | 'settings';
+
 export interface ServiceStatus {
   name: string;
   type: 'awg' | 'hy2';
@@ -35,4 +40,28 @@ export interface SystemStats {
   totalTxBytes: number;
   activeTunnels: number;
   status: 'ONLINE' | 'DEGRADED' | 'MAINTENANCE';
+}
+
+export interface AWGParams {
+  jc: number;
+  jmin: number;
+  jmax: number;
+  s1: number;
+  s2: number;
+  h1: number;
+  h2: number;
+  h3: number;
+  h4: number;
+}
+
+export interface ServerConfig {
+  server_ip: string;
+  server_domain: string;
+  awg_port: number;
+  awg_subnet: string;
+  awg_params: AWGParams;
+  hy2_port: number;
+  hy2_port_hopping: string;
+  hy2_obfs_type: string;
+  hy2_obfs_password: string;
 }

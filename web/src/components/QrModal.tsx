@@ -21,7 +21,7 @@ export const QrModal: React.FC = () => {
     soundFx.ding();
     navigator.clipboard.writeText(qrValue);
     setCopied(true);
-    setMood('proud', 'Ссылка успешно скопирована! Отправь её на устройство~ ✨', 4000);
+    setMood('proud', 'Link copied to clipboard! Share it with your device~ ✨', 4000);
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -34,25 +34,19 @@ export const QrModal: React.FC = () => {
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
-    setMood('proud', 'Конфигурация AmneziaWG загружена! Импортируй в клиент~ 🛡️', 4000);
+    setMood('proud', 'AmneziaWG configuration downloaded! Ready to import~ 🛡️', 4000);
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
       <div 
-        className="relative w-full max-w-md bg-cosmic-850 border border-cyber-cyan/40 rounded-xl p-6 shadow-neon-cyan overflow-hidden"
+        className="relative w-full max-w-md bg-cosmic-850 border border-cyber-cyan/40 rounded-2xl p-6 shadow-neon-cyan overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Cyber corner accents */}
-        <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyber-cyan" />
-        <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-cyber-cyan" />
-        <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-cyber-cyan" />
-        <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-cyber-cyan" />
-
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-4 border-b border-cyber-cyan/20">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan">
+            <div className="p-2 rounded-xl bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan">
               <QrCode className="w-5 h-5" />
             </div>
             <div>
@@ -60,7 +54,7 @@ export const QrModal: React.FC = () => {
                 QR-CONNECT // {selectedUserForQr.name}
               </h3>
               <p className="text-xs font-mono text-slate-400">
-                Сканируй камерой или в приложении
+                Scan with camera or VPN client
               </p>
             </div>
           </div>
@@ -77,13 +71,13 @@ export const QrModal: React.FC = () => {
         </div>
 
         {/* Type Selector Tabs */}
-        <div className="grid grid-cols-2 gap-2 my-4 p-1 bg-cosmic-950 rounded-lg border border-slate-800 text-xs font-mono">
+        <div className="grid grid-cols-2 gap-2 my-4 p-1 bg-cosmic-950 rounded-xl border border-slate-800 text-xs font-mono">
           <button
             onClick={() => {
               soundFx.bleep();
               setQrType('mihomo');
             }}
-            className={`py-2 rounded flex items-center justify-center gap-1.5 transition-all ${
+            className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
               qrType === 'mihomo'
                 ? 'bg-cyber-pink text-white font-bold shadow-neon-pink'
                 : 'text-slate-400 hover:text-white'
@@ -97,7 +91,7 @@ export const QrModal: React.FC = () => {
               soundFx.bleep();
               setQrType('awg');
             }}
-            className={`py-2 rounded flex items-center justify-center gap-1.5 transition-all ${
+            className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
               qrType === 'awg'
                 ? 'bg-cyber-cyan text-cosmic-950 font-bold shadow-neon-cyan'
                 : 'text-slate-400 hover:text-white'
@@ -109,7 +103,7 @@ export const QrModal: React.FC = () => {
         </div>
 
         {/* QR Code Container */}
-        <div className="flex flex-col items-center justify-center p-6 bg-white rounded-xl my-4 shadow-inner relative group">
+        <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl my-4 shadow-inner relative group">
           <QRCodeSVG
             value={qrValue}
             size={220}
@@ -118,19 +112,19 @@ export const QrModal: React.FC = () => {
             bgColor="#FFFFFF"
             fgColor="#0B0F19"
           />
-          <div className="absolute bottom-2 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+          <div className="mt-2 text-[10px] font-mono text-slate-600 uppercase tracking-wider font-semibold">
             {qrType === 'mihomo' ? 'Auto-Update Mihomo Profile' : 'Direct AWG WireGuard Tunnel'}
           </div>
         </div>
 
-        {/* Info & Instructions */}
-        <div className="bg-cosmic-900/90 rounded-lg p-3 border border-slate-800 mb-4 text-xs font-mono text-slate-300 space-y-1.5">
+        {/* Info & Telemetry */}
+        <div className="bg-cosmic-900/90 rounded-xl p-3 border border-slate-800 mb-4 text-xs font-mono text-slate-300 space-y-1.5">
           <div className="flex items-center justify-between text-slate-400">
-            <span>Назначенный IP:</span>
+            <span>Assigned IP:</span>
             <span className="text-cyber-cyan font-bold">{selectedUserForQr.ipAddress}</span>
           </div>
           <div className="flex items-center justify-between text-slate-400">
-            <span>Протоколы:</span>
+            <span>Protocols:</span>
             <span className="text-cyber-pink font-bold">AmneziaWG + Hysteria 2 Gecko</span>
           </div>
         </div>
@@ -139,17 +133,17 @@ export const QrModal: React.FC = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={handleCopy}
-            className="flex-1 py-2.5 px-4 rounded-lg bg-cyber-pink/20 hover:bg-cyber-pink/30 border border-cyber-pink/50 text-cyber-pink font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-neon-pink"
+            className="flex-1 py-2.5 px-4 rounded-xl bg-cyber-pink/20 hover:bg-cyber-pink/30 border border-cyber-pink/50 text-cyber-pink font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-neon-pink"
           >
             {copied ? (
               <>
                 <Check className="w-4 h-4 text-white" />
-                <span className="text-white">СКОПИРОВАНО!</span>
+                <span className="text-white">COPIED!</span>
               </>
             ) : (
               <>
                 <Copy className="w-4 h-4" />
-                <span>КОПИРОВАТЬ {qrType === 'mihomo' ? 'ССЫЛКУ' : 'КОНФИГ'}</span>
+                <span>COPY {qrType === 'mihomo' ? 'LINK' : 'CONFIG'}</span>
               </>
             )}
           </button>
@@ -157,8 +151,8 @@ export const QrModal: React.FC = () => {
           {qrType === 'awg' && (
             <button
               onClick={handleDownloadConf}
-              className="py-2.5 px-3 rounded-lg bg-cyber-cyan/20 hover:bg-cyber-cyan/30 border border-cyber-cyan/50 text-cyber-cyan font-mono text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-neon-cyan"
-              title="Скачать .conf файл"
+              className="py-2.5 px-4 rounded-xl bg-cyber-cyan/20 hover:bg-cyber-cyan/30 border border-cyber-cyan/50 text-cyber-cyan font-mono text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-neon-cyan"
+              title="Download .conf file"
             >
               <Download className="w-4 h-4" />
               <span>.CONF</span>
